@@ -1,6 +1,8 @@
 package com.coolweather.android;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,11 +10,13 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.coolweather.android.gson.Forecast;
 import com.coolweather.android.gson.Weather;
 import com.coolweather.android.util.HttpUtil;
@@ -28,6 +32,8 @@ import okhttp3.Response;
 public class WeatherActivity extends AppCompatActivity {
 
     private static final String TAG = "WeatherActivity";
+
+    private ImageView bingPicImg;
 
     private ScrollView weatherLayout;
 
@@ -54,9 +60,19 @@ public class WeatherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //将背景图与状态栏融合在一起
+        if (Build.VERSION.SDK_INT >= 21) {
+            //当系统版本号>=21时，即5.0及以上系统才会执行
+            View decorView = getWindow().getDecorView();                                                                            //取得当前活动的 DecorView
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);   //改变系统 UI 显示，传入的参数会使得活动的布局显示在状态栏的上方
+            getWindow().setStatusBarColor(Color.TRANSPARENT);                                                                     //将状态栏设置为透明色
+        }
+
         setContentView(R.layout.activity_weather);
 
         /* 初始化控件 */
+        bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);
         weatherLayout = (ScrollView) findViewById(R.id.weather_layout);
         titleCity = (TextView) findViewById(R.id.title_city);
         titleUpdateTime = (TextView) findViewById(R.id.title_update_time);
@@ -71,6 +87,13 @@ public class WeatherActivity extends AppCompatActivity {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        String bingPic = preferences.getString("bing_pic", null);
+        if (bingPic != null) {
+            Glide.with(this).load(bingPic).into(bingPicImg);
+        } else {
+            loadBingPic();
+        }
+
         String weatherString = preferences.getString("weather", null);
         if (weatherString != null) {
             //有缓存时直接解析数据
@@ -82,6 +105,36 @@ public class WeatherActivity extends AppCompatActivity {
             weatherLayout.setVisibility(View.INVISIBLE);                                        //隐藏 ScrollView
             requestWeather(weatherId);
         }
+    }
+
+    private void loadBingPic() {
+        String requestBingPic = "http://guolin.tech/api/bing_pic";
+        HttpUtil.sendOkHttpRequest(requestBingPic, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(WeatherActivity.this, "加载图片失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String bingPic = response.body().string();
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
+                editor.putString("bing_pic", bingPic);
+                editor.apply();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(WeatherActivity.this).load(bingPic).into(bingPicImg);
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -121,6 +174,7 @@ public class WeatherActivity extends AppCompatActivity {
                 });
             }
         });
+        loadBingPic();          //在每次刷新天气信息时也刷新背景图片
     }
 
     /**
