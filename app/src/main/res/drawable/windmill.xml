@@ -1,0 +1,39 @@
+<vector android:height="24dp"
+    android:width="24dp"
+    android:viewportHeight="297.0"
+    android:viewportWidth="210.0"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:name="windmill_leaf"
+        android:rotation="0"
+        android:pivotX="105"
+        android:pivotY="99">
+
+        <path android:name="windmill1"
+            android:fillColor="@color/colorWhite"
+            android:pathData="m92.46,87.28 l26.23,-0.43 -8.73,-61.12 -17.5,61.55"
+            android:strokeAlpha="1" android:strokeColor="#000000"
+            android:strokeLineCap="butt" android:strokeLineJoin="miter" android:strokeWidth="0.26458332"/>
+
+        <path android:name="windmill2"
+            android:fillColor="@color/colorWhite"
+            android:pathData="m118.68,86.85 l-12.74,22.93 57.29,23 -44.55,-45.93"
+            android:strokeAlpha="1" android:strokeColor="#000000"
+            android:strokeLineCap="butt" android:strokeLineJoin="miter" android:strokeWidth="0.26458332"/>
+
+        <path android:name="windmill3"
+            android:fillColor="@color/colorWhite"
+            android:pathData="M92.46,87.28 L105.19,110.21 47.9,133.21 92.46,87.28"
+            android:strokeAlpha="1" android:strokeColor="#000000"
+            android:strokeLineCap="butt" android:strokeLineJoin="miter" android:strokeWidth="0.26458332"/>
+
+    </group>
+
+    <path android:name="windmill4"
+        android:fillColor="@color/colorWhite"
+        android:pathData="M101.56,94.96h7.56v122.46h-7.56z" android:strokeWidth="0.26458332"/>
+
+    <path android:name="windmill5"
+        android:fillColor="@color/colorWhite"
+        android:pathData="m97.21,94.86c-2,-3.58 -3.53,-6.62 -3.39,-6.75 0.13,-0.13 5.58,-0.35 12.1,-0.49l11.86,-0.24 -3.46,6.43C109.83,102.11 109.54,102.38 109.54,98.11l0,-3.55l-4.12,0 -4.12,0l-0.23,3.41 -0.23,3.41z" android:strokeWidth="2.85714293"/>
+</vector>

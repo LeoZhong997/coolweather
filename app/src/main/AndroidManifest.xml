@@ -24,7 +24,27 @@
         <service
             android:name=".service.AutoUpdateService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <receiver android:name=".WeatherWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.WEATHER_INFO_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/weather_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".service.WeatherWidgetService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.WEATHER_WIDGET_SERVICE"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

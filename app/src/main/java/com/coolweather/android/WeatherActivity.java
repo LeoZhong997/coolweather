@@ -3,7 +3,7 @@ package com.coolweather.android;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.nfc.Tag;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,6 +101,13 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);                             //设置下拉刷新进度条的颜色
 
+        ImageView imageView = (ImageView) findViewById(R.id.windmill_image);
+        AnimatedVectorDrawable vectorDrawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.windmill_vector_animator, null);
+        imageView.setImageDrawable(vectorDrawable);
+        if (vectorDrawable != null) {
+            vectorDrawable.start();
+        }
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         String bingPic = preferences.getString("bing_pic", null);
@@ -113,6 +119,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         final String weatherId;
         String weatherString = preferences.getString("weather", null);
+        Log.d(TAG, "onCreate: "  + weatherString);
         if (weatherString != null) {
             //有缓存时直接解析数据
             Weather weather = Utility.handleWeatherResponse(weatherString);

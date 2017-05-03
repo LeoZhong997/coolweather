@@ -5,11 +5,32 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.coolweather.android"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    lintOptions {
+        abortOnError false
+    }
+    /*生成多渠道的APK功能
+    productFlavors {
+        qihoo {
+            applicationId "com.coolweather.android.qihoo"
+        }
+        baidu {
+            applicationId "com.coolweather.android.baidu"
+        }
+    }
+    */
+    signingConfigs {
+        config {
+            storeFile file(KEY_PATH)
+            storePassword KEY_PASS
+            keyAlias ALIAS_NAME
+            keyPassword ALIAS_PASS
+        }
     }
     buildTypes {
         release {
