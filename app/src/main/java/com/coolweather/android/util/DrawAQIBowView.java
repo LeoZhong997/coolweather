@@ -41,12 +41,12 @@ public class DrawAQIBowView extends BaseView {
      */
     private void init() {
         paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setTextSize(50);
+        paint.setAntiAlias(true);   //抗锯齿
     }
 
     @Override
     protected void onDrawSub(Canvas canvas) {
+        paint.setAntiAlias(true);
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
         canvas.drawArc(extRect, startAngle, aqiAngle, true, paint);
