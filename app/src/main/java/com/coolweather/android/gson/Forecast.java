@@ -17,18 +17,31 @@ public class Forecast {
     @SerializedName("cond")
     public More more;
 
-    public class Temperature {
+    @SerializedName("astro")
+    public Astronomy astronomy;
 
+    public class Temperature {
         public String max;
 
         public String min;
-
     }
 
     public class More {
-
         @SerializedName("txt_d")
         public String info;
+    }
 
+    public class Astronomy {
+        @SerializedName("mr")
+        public String moonRise;
+
+        @SerializedName("ms")
+        public String moonSet;
+
+        @SerializedName("sr")
+        public String sunRise;
+
+        @SerializedName("ss")
+        public String sunSet;
     }
 }

@@ -25,6 +25,8 @@ import com.bumptech.glide.Glide;
 import com.coolweather.android.gson.Forecast;
 import com.coolweather.android.gson.Weather;
 import com.coolweather.android.service.AutoUpdateService;
+import com.coolweather.android.util.DrawAQIBowView;
+import com.coolweather.android.util.DrawSunBowView;
 import com.coolweather.android.util.HttpUtil;
 import com.coolweather.android.util.LogUtil;
 import com.coolweather.android.util.Utility;
@@ -59,15 +61,53 @@ public class WeatherActivity extends AppCompatActivity {
 
     private LinearLayout forecastLayout;
 
+    private DrawAQIBowView drawAQIBowView;
+
     private TextView aqiText;
 
     private TextView pm25Text;
+
+    private TextView aqiQualityText;
+
+    private TextView pm10Text;
+
+    private TextView so2Text;
+
+    private TextView no2Text;
+
+    private TextView coText;
+
+    private TextView o3Text;
+
+    private TextView windDirText;
+
+    private TextView windSpeedDegreeText;
+
+    private TextView windSpeedText;
+
+    private TextView humidity;
 
     private TextView comfortText;
 
     private TextView carWashText;
 
     private TextView sportText;
+
+    private TextView airConditionText;
+
+    private TextView dressText;
+
+    private TextView fluText;
+
+    private TextView travelText;
+
+    private TextView sunscreenText;
+
+    private TextView sunRiseText;
+
+    private TextView sunSetText;
+
+    private DrawSunBowView drawSunBowView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,19 +133,46 @@ public class WeatherActivity extends AppCompatActivity {
         degreeText = (TextView) findViewById(R.id.degree_text);
         weatherInfoText = (TextView) findViewById(R.id.weather_info_text);
         forecastLayout = (LinearLayout) findViewById(R.id.forecast_layout);
+        drawAQIBowView = (DrawAQIBowView) findViewById(R.id.draw_aqi_bow_view);
         aqiText = (TextView) findViewById(R.id.aqi_text);
+        aqiQualityText = (TextView) findViewById(R.id.quality_text);
         pm25Text = (TextView) findViewById(R.id.pm25_text);
+        pm10Text = (TextView) findViewById(R.id.pm10_text);
+        so2Text = (TextView) findViewById(R.id.so2_text);
+        no2Text = (TextView) findViewById(R.id.no2_text);
+        coText = (TextView) findViewById(R.id.co_text);
+        o3Text = (TextView) findViewById(R.id.o3_text);
+        windDirText = (TextView) findViewById(R.id.wind_direction_text);
+        windSpeedDegreeText = (TextView) findViewById(R.id.wind_speed_degree_text);
+        windSpeedText = (TextView) findViewById(R.id.wind_speed_text);
+        humidity = (TextView) findViewById(R.id.hum_text);
         comfortText = (TextView) findViewById(R.id.comfort_text);
         carWashText = (TextView) findViewById(R.id.car_wash_text);
         sportText = (TextView) findViewById(R.id.sport_text);
+        airConditionText = (TextView) findViewById(R.id.air_condition);
+        dressText = (TextView) findViewById(R.id.dress_suggestion);
+        fluText = (TextView) findViewById(R.id.flu_index);
+        travelText = (TextView) findViewById(R.id.travel_index);
+        sunscreenText = (TextView) findViewById(R.id.sunscreen_index);
+        sunRiseText = (TextView) findViewById(R.id.sun_rise_time_text);
+        sunSetText = (TextView) findViewById(R.id.sun_set_time_text);
+        drawSunBowView = (DrawSunBowView) findViewById(R.id.draw_sun_row_view);
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);                             //设置下拉刷新进度条的颜色
 
-        ImageView imageView = (ImageView) findViewById(R.id.windmill_image);
-        AnimatedVectorDrawable vectorDrawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.windmill_vector_animator, null);
-        imageView.setImageDrawable(vectorDrawable);
-        if (vectorDrawable != null) {
-            vectorDrawable.start();
+//        drawSunBowView.setVisibility(View.INVISIBLE);                                           //初始化时先关闭日出日落时间显示
+
+        ImageView imageSmallView = (ImageView) findViewById(R.id.windmill_small_image);
+        ImageView imageLargeView = (ImageView) findViewById(R.id.windmill_large_image);
+        AnimatedVectorDrawable vectorSDrawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.windmill_vector_animator, null);
+        AnimatedVectorDrawable vectorLDrawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.windmill_vector_animator, null);
+        imageSmallView.setImageDrawable(vectorSDrawable);
+        imageLargeView.setImageDrawable(vectorLDrawable);
+        if (vectorSDrawable != null) {
+            vectorSDrawable.start();
+        }
+        if (vectorLDrawable != null) {
+            vectorLDrawable.start();
         }
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -117,7 +184,7 @@ public class WeatherActivity extends AppCompatActivity {
             loadBingPic();
         }
 
-        final String weatherId;
+        String weatherId;
         String weatherString = preferences.getString("weather", null);
         Log.d(TAG, "onCreate: "  + weatherString);
         if (weatherString != null) {
@@ -136,7 +203,11 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                requestWeather(weatherId);
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
+                String weatherString = preferences.getString("weather", null);
+                Weather weather = Utility.handleWeatherResponse(weatherString);
+                String weatherNewId = weather.basic.weatherId;
+                requestWeather(weatherNewId);
             }
         });
 
@@ -206,6 +277,7 @@ public class WeatherActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (weather != null && "ok".equals(weather.status)) {
+                            Log.d(TAG, "save city");
                             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
                             editor.putString("weather", responseText);
                             editor.apply();
@@ -226,15 +298,28 @@ public class WeatherActivity extends AppCompatActivity {
      * @param weather
      */
     private void showWeatherInfo(Weather weather) {
+        String currentDate;
+        String sunRise = null;
+        String sunSet = null;
+
         if (weather != null && "ok" .equals(weather.status)) {
             String cityName = weather.basic.cityName;
+            currentDate = weather.basic.update.updateTime.split(" ")[0];
             String updateTime = weather.basic.update.updateTime.split(" ")[1];          //将格式为 2017-04-27 11:52 的通过分割，选择时间部分显示
             String degree = weather.now.temperature + "℃";
             String weatherInfo = weather.now.more.info;
+            String windDir = weather.now.wind.windDir;
+            String windSpeedDegree = weather.now.wind.windSpeedDegree + "级";
+            String hum = weather.now.humidity + "%";
+            String windSpeed = weather.now.wind.windSpeed + "km/h";
             titleCity.setText(cityName);
             titleUpdateTime.setText(updateTime);
             degreeText.setText(degree);
             weatherInfoText.setText(weatherInfo);
+            windDirText.setText(windDir);
+            windSpeedDegreeText.setText(windSpeedDegree);
+            windSpeedText.setText(windSpeed);
+            humidity.setText(hum);
 
             forecastLayout.removeAllViews();
             //动态加载 forecast_item.xml 布局并设置相应的数据，然后添加到父布局当中
@@ -245,24 +330,53 @@ public class WeatherActivity extends AppCompatActivity {
                 TextView maxText = (TextView) view.findViewById(R.id.max_text);
                 TextView minText = (TextView) view.findViewById(R.id.min_text);
                 dateText.setText(forecast.date);
-                LogUtil.d(TAG, "showWeatherInfo: " + forecast.date + " " + forecast.more.info + " " + forecast.temperature.max + " " + forecast.temperature.min);
                 infoText.setText(forecast.more.info);
                 maxText.setText(forecast.temperature.max);
                 minText.setText(forecast.temperature.min);
+                if (forecast.date.equals(currentDate)) {
+                    sunRise = forecast.astronomy.sunRise;
+                    sunSet = forecast.astronomy.sunSet;
+                }
+                LogUtil.d(TAG, "showWeatherInfo: " + forecast.date + " " + forecast.more.info + " " + forecast.temperature.max + " " + forecast.temperature.min + " " + sunRise + " " + sunSet);
                 forecastLayout.addView(view);
             }
 
+            sunRiseText.setText("日出" + sunRise);
+            sunSetText.setText("日落" + sunSet);
+            drawSunBowView.setSunRise(sunRise);
+            drawSunBowView.setSunSet(sunSet);
+            drawSunBowView.setUpdate(updateTime);
+            LogUtil.d(TAG, "sunRiseTime " + sunRise + " sunSetTime " + sunSet + " updateTime " + updateTime);
+            drawSunBowView.start();
+
             if (weather.aqi != null) {
+                drawAQIBowView.setAqiQuality(Integer.parseInt(weather.aqi.city.aqi));
                 aqiText.setText(weather.aqi.city.aqi);
-                pm25Text.setText(weather.aqi.city.pm25);
+                aqiQualityText.setText(weather.aqi.city.quality);
+                pm25Text.setText(weather.aqi.city.pm25 + "ug/m³");
+                pm10Text.setText(weather.aqi.city.pm10 + "ug/m³");
+                so2Text.setText(weather.aqi.city.so2 + "ug/m³");
+                no2Text.setText(weather.aqi.city.no2 + "ug/m³");
+                coText.setText(weather.aqi.city.co + "ug/m³");
+                o3Text.setText(weather.aqi.city.o3 + "ug/m³");
             }
 
-            String comfort = "舒适度： " + weather.suggestion.comfort.info;
-            String carWash = "洗车指数： " + weather.suggestion.carWash.info;
-            String sport = "运动指数： " + weather.suggestion.sport.info;
+            String comfort = "舒适指数： " + weather.suggestion.comfortIndex.brief + "\n" + weather.suggestion.comfortIndex.info;
+            String carWash = "洗车指数： " + weather.suggestion.carWashIndex.brief + "\n" + weather.suggestion.carWashIndex.info;
+            String sport = "运动指数： " + weather.suggestion.sportIndex.brief + "\n" + weather.suggestion.sportIndex.info;
+            String air = "空气指数： " + weather.suggestion.airIndex.brief + "\n" + weather.suggestion.airIndex.info;
+            String dress = "穿衣指数： " + weather.suggestion.dressIndex.brief + "\n" + weather.suggestion.dressIndex.info;
+            String flu = "流感指数： " + weather.suggestion.fluIndex.brief + "\n" + weather.suggestion.fluIndex.info;
+            String travel = "旅行指数： " + weather.suggestion.travelIndex.brief + "\n" + weather.suggestion.travelIndex.info;
+            String sunscreen = "防晒指数： " + weather.suggestion.sunscreenIndex.brief + "\n" + weather.suggestion.sunscreenIndex.info;
             comfortText.setText(comfort);
             carWashText.setText(carWash);
             sportText.setText(sport);
+            airConditionText.setText(air);
+            dressText.setText(dress);
+            fluText.setText(flu);
+            travelText.setText(travel);
+            sunscreenText.setText(sunscreen);
 
             weatherLayout.setVisibility(View.VISIBLE);                          //设置 ScrollView 为可见
 

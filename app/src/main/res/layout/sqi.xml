@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    android:background="@color/colorGray">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        android:text="空气质量"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:paddingRight="5dp"
+            android:layout_marginBottom="10dp">
+
+            <com.coolweather.android.util.DrawAQIBowView
+                android:id="@+id/draw_aqi_bow_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/aqiBowHeight"
+                android:layout_marginTop="20dp"
+                android:alpha="0.4"
+                android:layout_alignParentTop="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@+id/aqi_text"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/colorWhite"
+                android:text="AQI"/>
+
+            <TextView
+                android:id="@+id/aqi_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="15dp"
+                android:textColor="@color/colorWhite"
+                android:text="100"/>
+
+            <TextView
+                android:id="@+id/quality_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/colorWhite"
+                android:text="良"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:textColor="@color/colorWhite"
+                android:text="PM2.5[细颗粒物]"/>
+
+            <TextView
+                android:id="@+id/pm25_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="5dp"
+                android:textColor="@color/colorWhite"
+                android:text="152ug/m³"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/pm25_text"
+                android:background="@color/colorWhite"
+                android:alpha="0.5"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/pm25_text"
+                android:layout_alignParentLeft="true"
+                android:textColor="@color/colorWhite"
+                android:text="PM10[可吸入颗粒物]"/>
+
+            <TextView
+                android:id="@+id/pm10_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/pm25_text"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="5dp"
+                android:textColor="@color/colorWhite"
+                android:text="553ug/m³"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/pm10_text"
+                android:background="@color/colorWhite"
+                android:alpha="0.5"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/pm10_text"
+                android:layout_alignParentLeft="true"
+                android:textColor="@color/colorWhite"
+                android:text="SO2[二氧化硫]"/>
+
+            <TextView
+                android:id="@+id/so2_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/pm10_text"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="5dp"
+                android:textColor="@color/colorWhite"
+                android:text="6ug/m³"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/so2_text"
+                android:background="@color/colorWhite"
+                android:alpha="0.5"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/so2_text"
+                android:layout_alignParentLeft="true"
+                android:textColor="@color/colorWhite"
+                android:text="NO2[二氧化氮]"/>
+
+            <TextView
+                android:id="@+id/no2_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/so2_text"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="5dp"
+                android:textColor="@color/colorWhite"
+                android:text="50ug/m³"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/no2_text"
+                android:background="@color/colorWhite"
+                android:alpha="0.5"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/no2_text"
+                android:layout_alignParentLeft="true"
+                android:textColor="@color/colorWhite"
+                android:text="CO[一氧化碳]"/>
+
+            <TextView
+                android:id="@+id/co_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/no2_text"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="5dp"
+                android:textColor="@color/colorWhite"
+                android:text="55ug/m³"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/co_text"
+                android:background="@color/colorWhite"
+                android:alpha="0.5"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/co_text"
+                android:layout_alignParentLeft="true"
+                android:textColor="@color/colorWhite"
+                android:text="O3[臭氧]"/>
+
+            <TextView
+                android:id="@+id/o3_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/co_text"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="5dp"
+                android:textColor="@color/colorWhite"
+                android:text="55ug/m³"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

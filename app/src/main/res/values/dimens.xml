@@ -2,6 +2,8 @@
 <resources>
 
     <dimen name="actionBarSize">50dp</dimen>
+    <dimen name="bowWidth">140dp</dimen>
+    <dimen name="aqiBowHeight">80dp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information

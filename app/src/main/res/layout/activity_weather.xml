@@ -40,11 +40,13 @@
 
                     <include layout="@layout/forecast"/>
 
-                    <include layout="@layout/aqi"/>
+                    <include layout="@layout/sqi"/>
 
                     <include layout="@layout/wind_hyg"/>
 
                     <include layout="@layout/suggestion"/>
+
+                    <include layout="@layout/sun_rise_sun_set"/>
 
                 </LinearLayout>
 
@@ -70,8 +72,6 @@
                 android:layout_height="match_parent"/>
 
         </LinearLayout>
-
-
 
     </android.support.v4.widget.DrawerLayout>
 

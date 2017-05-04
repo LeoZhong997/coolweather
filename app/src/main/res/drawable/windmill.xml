@@ -1,39 +1,59 @@
-<vector android:height="24dp"
-    android:width="24dp"
-    android:viewportHeight="297.0"
-    android:viewportWidth="210.0"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="150dp"
+    android:width="100dp"
+    android:viewportHeight="150"
+    android:viewportWidth="100"
+    >
 
-    <group android:name="windmill_leaf"
-        android:rotation="0"
-        android:pivotX="105"
-        android:pivotY="99">
+    <group android:translateY="-147">
 
-        <path android:name="windmill1"
-            android:fillColor="@color/colorWhite"
-            android:pathData="m92.46,87.28 l26.23,-0.43 -8.73,-61.12 -17.5,61.55"
-            android:strokeAlpha="1" android:strokeColor="#000000"
-            android:strokeLineCap="butt" android:strokeLineJoin="miter" android:strokeWidth="0.26458332"/>
+        <group android:name="windmill_leaf"
+            android:rotation="0"
+            android:pivotX="51"
+            android:pivotY="197">
 
-        <path android:name="windmill2"
-            android:fillColor="@color/colorWhite"
-            android:pathData="m118.68,86.85 l-12.74,22.93 57.29,23 -44.55,-45.93"
-            android:strokeAlpha="1" android:strokeColor="#000000"
-            android:strokeLineCap="butt" android:strokeLineJoin="miter" android:strokeWidth="0.26458332"/>
+            <path android:name="windmill1"
+                android:fillColor="@color/colorWhite"
+                android:pathData="m 50.951191,153.36905 v 43.08928 l 7.559524,-32.50595 z"
+                android:strokeAlpha="1"
+                android:strokeColor="#000000"
+                android:strokeLineCap="butt"
+                android:strokeLineJoin="miter"
+                android:strokeWidth="0.26458332"/>
 
-        <path android:name="windmill3"
-            android:fillColor="@color/colorWhite"
-            android:pathData="M92.46,87.28 L105.19,110.21 47.9,133.21 92.46,87.28"
-            android:strokeAlpha="1" android:strokeColor="#000000"
-            android:strokeLineCap="butt" android:strokeLineJoin="miter" android:strokeWidth="0.26458332"/>
+            <path android:name="windmill2"
+                android:fillColor="@color/colorWhite"
+                android:pathData="M 88.26761,218.00297 50.951191,196.45833 75.32241,219.25804 Z"
+                android:strokeAlpha="1"
+                android:strokeColor="#000000"
+                android:strokeLineCap="butt"
+                android:strokeLineJoin="miter"
+                android:strokeWidth="0.26458332"/>
+
+            <path android:name="windmill3"
+                android:fillColor="@color/colorWhite"
+                android:pathData="m 13.634781,218.00297 37.31641,-21.54464 -31.930735,9.70624 z"
+                android:strokeAlpha="1"
+                android:strokeColor="#000000"
+                android:strokeLineCap="butt"
+                android:strokeLineJoin="miter"
+                android:strokeWidth="0.26458332"/>
+
+        </group>
+
+        <path
+            android:name="windmill4"
+            android:strokeColor="@color/colorWhite"
+            android:pathData="M 50.951191,196.45833 35.832142,294.73214"
+            android:strokeWidth="1.5"/>
+
+        <path
+            android:name="windmill5"
+            android:strokeColor="@color/colorWhite"
+            android:strokeWidth="1.5"
+            android:pathData="M 50.951191,196.45833 66.07024,294.73215"/>
 
     </group>
 
-    <path android:name="windmill4"
-        android:fillColor="@color/colorWhite"
-        android:pathData="M101.56,94.96h7.56v122.46h-7.56z" android:strokeWidth="0.26458332"/>
 
-    <path android:name="windmill5"
-        android:fillColor="@color/colorWhite"
-        android:pathData="m97.21,94.86c-2,-3.58 -3.53,-6.62 -3.39,-6.75 0.13,-0.13 5.58,-0.35 12.1,-0.49l11.86,-0.24 -3.46,6.43C109.83,102.11 109.54,102.38 109.54,98.11l0,-3.55l-4.12,0 -4.12,0l-0.23,3.41 -0.23,3.41z" android:strokeWidth="2.85714293"/>
 </vector>

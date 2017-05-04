@@ -16,24 +16,67 @@
         android:text="生活建议"/>
 
     <TextView
+        android:id="@+id/air_condition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:textColor="@color/colorWhite"
+        android:text="空气指数"/>
+
+    <TextView
         android:id="@+id/comfort_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:textColor="@color/colorWhite"/>
+        android:textColor="@color/colorWhite"
+        android:text="舒适指数"/>
 
     <TextView
         android:id="@+id/car_wash_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:textColor="@color/colorWhite"/>
+        android:textColor="@color/colorWhite"
+        android:text="洗车指数"/>
+
+    <TextView
+        android:id="@+id/dress_suggestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:textColor="@color/colorWhite"
+        android:text="穿衣指数"/>
+
+    <TextView
+        android:id="@+id/flu_index"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:textColor="@color/colorWhite"
+        android:text="流感指数"/>
 
     <TextView
         android:id="@+id/sport_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:textColor="@color/colorWhite"/>
+        android:textColor="@color/colorWhite"
+        android:text="运动指数"/>
+
+    <TextView
+        android:id="@+id/travel_index"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:textColor="@color/colorWhite"
+        android:text="旅行指数"/>
+
+    <TextView
+        android:id="@+id/sunscreen_index"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:textColor="@color/colorWhite"
+        android:text="防晒指数"/>
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -21,13 +22,21 @@
         android:layout_margin="15dp">
 
         <ImageView
-            android:id="@+id/windmill_image"
-            android:layout_gravity="center"
-            android:layout_width="80dp"
+            android:id="@+id/windmill_small_image"
+            android:layout_gravity="bottom"
+            android:layout_width="40dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="10dp"
+            app:srcCompat="@drawable/windmill"/>
+
+
+        <ImageView
+            android:id="@+id/windmill_large_image"
+            android:layout_gravity="bottom"
+            android:layout_width="60dp"
             android:layout_height="80dp"
-            android:src="@drawable/windmill"/>
-
-
+            android:layout_marginBottom="10dp"
+            app:srcCompat="@drawable/windmill"/>
 
         <LinearLayout
             android:orientation="vertical"
@@ -49,7 +58,7 @@
                     android:text="风向"/>
 
                 <TextView
-                    android:id="@+id/wind_direction"
+                    android:id="@+id/wind_direction_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -61,7 +70,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/colorWhite"/>
+                android:background="@color/colorWhite"
+                android:alpha="0.5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -77,6 +87,7 @@
                     android:text="风力"/>
 
                 <TextView
+                    android:id="@+id/wind_speed_degree_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -88,7 +99,37 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/colorWhite"/>
+                android:background="@color/colorWhite"
+                android:alpha="0.5"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:text="风速"/>
+
+                <TextView
+                    android:id="@+id/wind_speed_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:text="5km/h"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorWhite"
+                android:alpha="0.5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -104,6 +145,7 @@
                     android:text="湿度"/>
 
                 <TextView
+                    android:id="@+id/hum_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
