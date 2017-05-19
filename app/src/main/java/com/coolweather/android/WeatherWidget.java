@@ -11,6 +11,7 @@ import android.widget.RemoteViews;
 
 import com.coolweather.android.gson.Weather;
 import com.coolweather.android.service.WeatherWidgetService;
+import com.coolweather.android.util.LogUtil;
 import com.coolweather.android.util.MyApplication;
 import com.coolweather.android.util.Utility;
 
@@ -53,7 +54,7 @@ public class WeatherWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created
-        Log.d(TAG, "onEnabled");
+        LogUtil.d(TAG, "onEnabled");
         //在第一个widget被创建时开启服务
 //        context.startService(WEATHER_WIDGET_SERVICE);
         Intent intent = new Intent(context, WeatherWidgetService.class);
@@ -63,7 +64,7 @@ public class WeatherWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
-        Log.d(TAG, "onDisabled");
+        LogUtil.d(TAG, "onDisabled");
         //在最后一个widget被删除时关闭服务
 //        context.stopService(WEATHER_WIDGET_SERVICE);
         Intent intent = new Intent(context, WeatherWidgetService.class);
@@ -73,7 +74,7 @@ public class WeatherWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
-        Log.d(TAG, "onReceive: Action is " + action);
+        LogUtil.d(TAG, "onReceive: Action is " + action);
         if (WEATHER_INFO_UPDATE.equals(action)) {
             updateAppWidgets(context, AppWidgetManager.getInstance(context), idsSet);
         }
@@ -101,6 +102,8 @@ public class WeatherWidget extends AppWidgetProvider {
             remoteView.setTextViewText(R.id.widget_pm25_text, weather.aqi.city.pm25);
 
             remoteView.setTextViewText(R.id.widget_aqi_text,weather.aqi.city.aqi);
+
+            remoteView.setTextViewText(R.id.widget_update_time, weather.basic.update.updateTime.split(" ")[1]);
 
             appWidgetManager.updateAppWidget(widgetId, remoteView);        //更新widget
 

@@ -53,7 +53,7 @@ public abstract class BaseView extends View {
                 logic();
                 postInvalidate();              //重新绘制，会调用onDraw
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

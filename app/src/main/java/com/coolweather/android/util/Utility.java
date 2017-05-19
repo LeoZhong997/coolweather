@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.coolweather.android.db.City;
 import com.coolweather.android.db.County;
+import com.coolweather.android.db.CountyLoaded;
 import com.coolweather.android.db.Province;
 import com.coolweather.android.gson.Weather;
 import com.google.gson.Gson;
@@ -11,6 +12,9 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
+
+import java.util.List;
 
 /**
  * Created by ZhiQiang on 2017/4/26.
@@ -35,6 +39,7 @@ public class Utility {
                     Province province = new Province();
                     province.setProvinceName(provinceObject.getString("name"));
                     province.setProvinceCode(provinceObject.getInt("id"));
+                    LogUtil.d(TAG, "province name: " + province.getProvinceName());
                     province.save();
                 }
                 return true;
@@ -99,9 +104,30 @@ public class Utility {
             /* 先通过 JSONObject 和 JSONArray 将天气数据的主体内容解析出来 */
             JSONObject jsonObject = new JSONObject(response);
             JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
-
             String weatherContent = jsonArray.getJSONObject(0).toString();
-            return new Gson().fromJson(weatherContent, Weather.class);      //调用 fromJson() 方法直接将 JSON 数据转换成 Weather 对象
+            Weather weather = new Gson().fromJson(weatherContent, Weather.class);      //调用 fromJson() 方法直接将 JSON 数据转换成 Weather 对象
+            String weatherId = weather.basic.weatherId;
+            String countyName = weather.basic.cityName;
+            String weatherState = weather.now.more.info;
+            String weatherDegree = weather.now.temperature + "℃";
+            List<CountyLoaded> countyLoadedList = DataSupport.where("weatherId = ?", weatherId).find(CountyLoaded.class);
+            if (countyLoadedList.size() > 0) {
+                LogUtil.d(TAG, "countyLoadedList size " + countyLoadedList.size());
+                CountyLoaded countyLoaded = new CountyLoaded();
+                countyLoaded.setWeatherString(response);
+                countyLoaded.setWeatherDegree(weatherDegree);
+                countyLoaded.setWeatherState(weatherState);
+                countyLoaded.updateAll("weatherId = ?", weatherId);
+            } else {
+                CountyLoaded countyLoaded = new CountyLoaded();
+                countyLoaded.setCountyName(countyName);
+                countyLoaded.setWeatherId(weatherId);
+                countyLoaded.setWeatherDegree(weatherDegree);
+                countyLoaded.setWeatherState(weatherState);
+                countyLoaded.setWeatherString(response);
+                countyLoaded.save();
+            }
+            return weather;
         } catch (JSONException e) {
             e.printStackTrace();
         }

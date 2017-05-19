@@ -1,20 +1,27 @@
 package com.coolweather.android;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -22,9 +29,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.coolweather.android.db.City;
 import com.coolweather.android.gson.Forecast;
 import com.coolweather.android.gson.Weather;
 import com.coolweather.android.service.AutoUpdateService;
+import com.coolweather.android.util.ActivityCollector;
+import com.coolweather.android.util.BaseActivity;
 import com.coolweather.android.util.DrawAQIBowView;
 import com.coolweather.android.util.DrawSunBowView;
 import com.coolweather.android.util.HttpUtil;
@@ -33,17 +43,20 @@ import com.coolweather.android.util.Utility;
 
 import java.io.IOException;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class WeatherActivity extends AppCompatActivity {
+public class WeatherActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "WeatherActivity";
 
     public DrawerLayout drawerLayout;
 
-    private Button navButton;
+    private Toolbar toolbar;
+
+    private NavigationView navigationView;
 
     public SwipeRefreshLayout swipeRefresh;
 
@@ -109,10 +122,16 @@ public class WeatherActivity extends AppCompatActivity {
 
     private DrawSunBowView drawSunBowView;
 
+    public static void actionStart(Context context, String weatherId, String activityName) {
+        Intent intent = new Intent(context, WeatherActivity.class);
+        intent.putExtra("weather_id", weatherId);
+        intent.putExtra("activity_name", activityName);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //将背景图与状态栏融合在一起
         if (Build.VERSION.SDK_INT >= 21) {
             //当系统版本号>=21时，即5.0及以上系统才会执行
@@ -120,12 +139,12 @@ public class WeatherActivity extends AppCompatActivity {
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);   //改变系统 UI 显示，传入的参数会使得活动的布局显示在状态栏的上方
             getWindow().setStatusBarColor(Color.TRANSPARENT);                                                                     //将状态栏设置为透明色
         }
-
         setContentView(R.layout.activity_weather);
 
         /* 初始化控件 */
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navButton = (Button) findViewById(R.id.nav_button);
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);
         weatherLayout = (ScrollView) findViewById(R.id.weather_layout);
         titleCity = (TextView) findViewById(R.id.title_city);
@@ -160,43 +179,48 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);                             //设置下拉刷新进度条的颜色
 
-//        drawSunBowView.setVisibility(View.INVISIBLE);                                           //初始化时先关闭日出日落时间显示
+        //ToolBar 初始化
+        actionBarInit();
 
-        ImageView imageSmallView = (ImageView) findViewById(R.id.windmill_small_image);
-        ImageView imageLargeView = (ImageView) findViewById(R.id.windmill_large_image);
-        AnimatedVectorDrawable vectorSDrawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.windmill_vector_animator, null);
-        AnimatedVectorDrawable vectorLDrawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.windmill_vector_animator, null);
-        imageSmallView.setImageDrawable(vectorSDrawable);
-        imageLargeView.setImageDrawable(vectorLDrawable);
-        if (vectorSDrawable != null) {
-            vectorSDrawable.start();
-        }
-        if (vectorLDrawable != null) {
-            vectorLDrawable.start();
-        }
+        //NavigationView 初始化
+        navigationViewInit();
 
+        //风车 svg 图初始化
+        windmillInit();
+
+        //获取背景图
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        SharedPreferences.Editor editor = preferences.edit();
         String bingPic = preferences.getString("bing_pic", null);
         if (bingPic != null) {
-            Glide.with(this).load(bingPic).into(bingPicImg);
+            Glide.with(this)
+                    .load(bingPic)
+                    .crossFade(1000)
+                    .bitmapTransform(new BlurTransformation(this, 23, 4))                          // 设置高斯模糊，“23”：设置模糊度(在0.0到25.0之间)，默认"25"; "4":图片缩放比例,默认“1”
+                    .into(bingPicImg);
         } else {
             loadBingPic();
         }
 
-        String weatherId;
-        String weatherString = preferences.getString("weather", null);
-        Log.d(TAG, "onCreate: "  + weatherString);
-        if (weatherString != null) {
-            //有缓存时直接解析数据
-            Weather weather = Utility.handleWeatherResponse(weatherString);
-            weatherId = weather.basic.weatherId;
-            showWeatherInfo(weather);
-        } else {
-            //无缓存时去服务器查询天气
-            weatherId = getIntent().getStringExtra("weather_id");
-            weatherLayout.setVisibility(View.INVISIBLE);                                        //隐藏 ScrollView
+        //展示天气数据
+        String activityName = getIntent().getStringExtra("activity_name");
+        String weatherId = getIntent().getStringExtra("weather_id");;
+        String weatherString;
+        if (activityName.equals("AddAreaActivity") | activityName.equals("CityManageActivity")) {
+            LogUtil.d(TAG, activityName);
             requestWeather(weatherId);
+        } else if (activityName.equals("MainActivity")){
+            weatherString = preferences.getString("weather", null);
+            if (weatherString != null) {
+                //有缓存时直接解析数据
+                Weather weather = Utility.handleWeatherResponse(weatherString);
+                weatherId = weather.basic.weatherId;
+                showWeatherInfo(weather);
+            } else {
+                //无缓存时去服务器查询天气
+                weatherLayout.setVisibility(View.INVISIBLE);                                        //隐藏 ScrollView
+                requestWeather(weatherId);
+            }
         }
 
         //下拉刷新监听器
@@ -210,14 +234,62 @@ public class WeatherActivity extends AppCompatActivity {
                 requestWeather(weatherNewId);
             }
         });
+    }
 
-        //按钮点击事件
-        navButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    private void navigationViewInit() {
+        navigationView.setCheckedItem(R.id.nav_city);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void actionBarInit() {
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_action_menu);
+        }
+    }
+
+    private void windmillInit() {
+        ImageView imageSmallView = (ImageView) findViewById(R.id.windmill_small_image);
+        ImageView imageLargeView = (ImageView) findViewById(R.id.windmill_large_image);
+        AnimatedVectorDrawable vectorSDrawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.windmill_vector_animator, null);
+        AnimatedVectorDrawable vectorLDrawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.windmill_vector_animator, null);
+        imageSmallView.setImageDrawable(vectorSDrawable);
+        imageLargeView.setImageDrawable(vectorLDrawable);
+        if (vectorSDrawable != null) {
+            vectorSDrawable.start();
+        }
+        if (vectorLDrawable != null) {
+            vectorLDrawable.start();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home :
                 drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
+                break;
+            case R.id.quit :
+                ActivityCollector.finishAll();
+                LogUtil.d(TAG, "You click quit");
+                break;
+            case R.id.setting :
+                LogUtil.d(TAG, "You click setting");
+                break;
+            case R.id.backup :
+                LogUtil.d(TAG, "You click backup");
+                break;
+        }
+        return true;
     }
 
     private void loadBingPic() {
@@ -243,7 +315,11 @@ public class WeatherActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Glide.with(WeatherActivity.this).load(bingPic).into(bingPicImg);
+                        Glide.with(WeatherActivity.this)
+                                .load(bingPic)
+                                .crossFade(1000)
+                                .bitmapTransform(new BlurTransformation(WeatherActivity.this, 23, 4))                          // “23”：设置模糊度(在0.0到25.0之间)，默认"25"; "4":图片缩放比例,默认“1”
+                                .into(bingPicImg);
                     }
                 });
             }
@@ -385,5 +461,38 @@ public class WeatherActivity extends AppCompatActivity {
         }else {
             Toast.makeText(this, "获取天气信息失败", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_city:
+                Intent intent = new Intent(this, CityManageActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_mood:
+
+                break;
+            case R.id.nav_theme:
+
+                break;
+            case R.id.nav_update:
+
+                break;
+            case R.id.nav_setting:
+
+                break;
+            case R.id.nav_about:
+
+                break;
+        }
+        drawerLayout.closeDrawers();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ActivityCollector.finishAll();
     }
 }

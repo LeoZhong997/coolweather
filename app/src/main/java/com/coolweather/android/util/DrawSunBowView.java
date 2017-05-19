@@ -64,12 +64,12 @@ public class DrawSunBowView extends BaseView {
 
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.WHITE);
-            paint.setStrokeWidth(6);
+            paint.setStrokeWidth(8);
             canvas.drawArc(extRect, startAngle, sweepAngle, false, paint);
 
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.WHITE);
-            paint.setStrokeWidth(3);
+            paint.setStrokeWidth(4);
             canvas.drawArc(getSunRect(), 0, 360, true, paint);
         }
 
@@ -78,10 +78,12 @@ public class DrawSunBowView extends BaseView {
     @Override
     protected void logic() {
         if (running) {
-            if (currentAngle < sunAngle / 2) {
-                currentAngle += 2;
+            if (currentAngle == (int) sunAngle) {
+                return;
+            } else if (currentAngle < sunAngle / 2) {
+                currentAngle += 1;
             } else if (currentAngle < sunAngle) {
-                currentAngle += 4;
+                currentAngle += 2;
             } else {
                 currentAngle = (int) sunAngle;
             }

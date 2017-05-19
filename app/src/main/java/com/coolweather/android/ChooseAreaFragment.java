@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,6 +40,12 @@ public class ChooseAreaFragment extends Fragment {
 
     private static final String TAG = "ChooseAreaFragment";         //调试用
 
+    //定义回退按钮的回调方法和变量
+    protected BackHandlerInterface mBackHandlerInterface;
+    public interface BackHandlerInterface {
+        void setSelectedFragment(ChooseAreaFragment chooseAreaFragment);
+    }
+
     public static final int LEVEL_PROVINCE = 0;         //选择省份
 
     public static final int LEVEL_CITY = 1;             //选择城市
@@ -55,7 +60,7 @@ public class ChooseAreaFragment extends Fragment {
 
     private ListView listView;                           //列表
 
-    private ArrayAdapter<String> arrayAdapter;          //列表适配器
+    private ChooseAreaAdapter cityArrayAdapter;         //自定义适配器
 
     private List<String> dataList = new ArrayList<>();  //数据列表，作为适配器的数据源
 
@@ -73,6 +78,24 @@ public class ChooseAreaFragment extends Fragment {
 
     private int currentLevel;                          //当前选中的级别
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //回调方法赋值
+        if (getActivity() instanceof BackHandlerInterface) {
+            mBackHandlerInterface = (BackHandlerInterface) getActivity();
+        } else {
+            throw new ClassCastException("Hosting Activity must implement BackHandlerInterface!");
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //将自己的实例传出去
+        mBackHandlerInterface.setSelectedFragment(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -82,8 +105,8 @@ public class ChooseAreaFragment extends Fragment {
         backButton = (Button) view.findViewById(R.id.back_button);
         listView = (ListView) view.findViewById(R.id.list_view);
 
-        arrayAdapter = new ArrayAdapter<>(MyApplication.getContext(), android.R.layout.simple_list_item_1, dataList);   //初始化 ArrayAdapter
-        listView.setAdapter(arrayAdapter);      //为 ListView  添加适配器
+        cityArrayAdapter = new ChooseAreaAdapter(getActivity(), R.layout.main_list_item, dataList);
+        listView.setAdapter(cityArrayAdapter);      //为 ListView  添加适配器
         return view;
     }
 
@@ -106,15 +129,17 @@ public class ChooseAreaFragment extends Fragment {
                     if (getActivity() instanceof MainActivity) {
                         Intent intent = new Intent(getActivity(), WeatherActivity.class);
                         intent.putExtra("weather_id", weatherId);
+                        intent.putExtra("activity_name", "MainActivity");
                         startActivity(intent);
                         getActivity().finish();
-                    } else if (getActivity() instanceof WeatherActivity) {                       //instanceof 关键字可以用来判断一个对象是否属于某个类的实例
-                        WeatherActivity weatherActivity = (WeatherActivity) getActivity();
-                        weatherActivity.drawerLayout.closeDrawers();                              //关闭滑动菜单
-                        weatherActivity.swipeRefresh.setRefreshing(true);                        //显示下拉刷新进度条
-                        weatherActivity.requestWeather(weatherId);                                  //请求新城市的天气信息
+                    } else if (getActivity() instanceof AddAreaActivity) {
+                        LogUtil.d(TAG, weatherId);
+                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra("weather_id", weatherId);
+                        intent.putExtra("activity_name", "AddAreaActivity");
+                        startActivity(intent);
+                        getActivity().finish();
                     }
-
                 }
             }
         });
@@ -122,7 +147,11 @@ public class ChooseAreaFragment extends Fragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentLevel == LEVEL_COUNTY) {
+                if (currentLevel == LEVEL_PROVINCE) {
+                    if (getActivity() instanceof AddAreaActivity) {
+                        getActivity().onBackPressed();
+                    }
+                } else if (currentLevel == LEVEL_COUNTY) {
                     queryCities();
                 } else if (currentLevel == LEVEL_CITY) {
                     queryProvinces();
@@ -133,11 +162,33 @@ public class ChooseAreaFragment extends Fragment {
     }
 
     /**
+     * 回退按钮处理逻辑
+     */
+    public boolean onBackPressed() {
+        if (mBackHandlerInterface != null) {
+            LogUtil.d(TAG, "catch backPressed event!");
+            if (currentLevel == LEVEL_PROVINCE) {
+                return false;
+            } else if (currentLevel == LEVEL_COUNTY) {
+                queryCities();
+            } else if (currentLevel == LEVEL_CITY) {
+                queryProvinces();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 查询全国所有的省，优先从数据库查询，如果没有查到再去服务器上查询
      */
     private void queryProvinces() {
         titleText.setText("中国");
-        backButton.setVisibility(View.GONE);                    //将 Button 设置隐藏
+        if (getActivity() instanceof AddAreaActivity) {
+            backButton.setVisibility(View.VISIBLE);
+        } else {
+            backButton.setVisibility(View.GONE);                    //将 Button 设置隐藏
+        }
         provinceList = DataSupport.findAll(Province.class);     //调用 LitePal 的查询接口来从数据库中读取省级数据
         /* 如果读取到了数据，将数据显示在界面上，没有则调用 queryFromServer() 方法来从服务器上查询数据 */
         if (provinceList.size() > 0) {
@@ -145,7 +196,7 @@ public class ChooseAreaFragment extends Fragment {
             for (Province province : provinceList) {
                 dataList.add(province.getProvinceName());        //填充 dataList
             }
-            arrayAdapter.notifyDataSetChanged();                //通知 ArrayAdapter 数据源已改变
+            cityArrayAdapter.notifyDataSetChanged();                //通知 ArrayAdapter 数据源已改变
             listView.setSelection(0);                            //定位到第一条
             currentLevel = LEVEL_PROVINCE;
         } else {
@@ -166,7 +217,7 @@ public class ChooseAreaFragment extends Fragment {
             for (City city : cityList) {
                 dataList.add(city.getCityName());
             }
-            arrayAdapter.notifyDataSetChanged();
+            cityArrayAdapter.notifyDataSetChanged();
             listView.setSelection(0);
             currentLevel = LEVEL_CITY;
         } else {
@@ -188,7 +239,7 @@ public class ChooseAreaFragment extends Fragment {
             for (County county : countyList) {
                 dataList.add(county.getCountyName());
             }
-            arrayAdapter.notifyDataSetChanged();
+            cityArrayAdapter.notifyDataSetChanged();
             listView.setSelection(0);
             currentLevel = LEVEL_COUNTY;
         } else {
