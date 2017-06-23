@@ -17,6 +17,8 @@ public class CountyLoaded extends DataSupport{
 
     private String weatherState;
 
+    private String weatherCondCode;
+
     private String weatherDegree;
 
     public int getId() {
@@ -57,6 +59,14 @@ public class CountyLoaded extends DataSupport{
 
     public void setWeatherState(String weatherState) {
         this.weatherState = weatherState;
+    }
+
+    public String getWeatherCondCode() {
+        return weatherCondCode;
+    }
+
+    public void setWeatherCondCode(String weatherCondCode) {
+        this.weatherCondCode = weatherCondCode;
     }
 
     public String getWeatherDegree() {

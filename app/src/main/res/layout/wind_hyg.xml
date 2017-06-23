@@ -21,27 +21,38 @@
         android:layout_height="wrap_content"
         android:layout_margin="15dp">
 
-        <ImageView
-            android:id="@+id/windmill_small_image"
-            android:layout_gravity="bottom"
-            android:layout_width="40dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="10dp"
-            app:srcCompat="@drawable/windmill"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/windmill_small_image"
+                android:layout_gravity="bottom"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="2"
+                android:layout_marginBottom="10dp"
+                app:srcCompat="@drawable/wm1"/>
 
 
-        <ImageView
-            android:id="@+id/windmill_large_image"
-            android:layout_gravity="bottom"
-            android:layout_width="60dp"
-            android:layout_height="80dp"
-            android:layout_marginBottom="10dp"
-            app:srcCompat="@drawable/windmill"/>
+            <ImageView
+                android:id="@+id/windmill_large_image"
+                android:layout_gravity="bottom"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="3"
+                android:layout_marginBottom="10dp"
+                app:srcCompat="@drawable/wm1"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
             android:layout_margin="10dp">
 
             <LinearLayout

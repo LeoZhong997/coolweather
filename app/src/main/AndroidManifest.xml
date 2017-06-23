@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.coolweather.android">
+          package="com.coolweather.android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".util.MyApplication"
@@ -14,33 +14,33 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".WeatherActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".service.AutoUpdateService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"/>
 
         <receiver android:name=".WeatherWidget">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.appwidget.action.WEATHER_INFO_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.WEATHER_INFO_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/weather_widget_info" />
+                android:resource="@xml/weather_widget_info"/>
         </receiver>
 
         <service
@@ -48,16 +48,17 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.appwidget.action.WEATHER_WIDGET_SERVICE" />
+                <action android:name="android.appwidget.action.WEATHER_WIDGET_SERVICE"/>
             </intent-filter>
         </service>
 
-        <activity android:name=".CityManageActivity"
+        <activity
+            android:name=".CityManageActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
         </activity>
-
-        <activity android:name=".AddAreaActivity"
+        <activity
+            android:name=".AddAreaActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
         </activity>

@@ -15,6 +15,8 @@
         android:textSize="20sp"
         android:text="生活建议"/>
 
+
+    <!--
     <TextView
         android:id="@+id/air_condition"
         android:layout_width="wrap_content"
@@ -22,6 +24,7 @@
         android:layout_margin="15dp"
         android:textColor="@color/colorWhite"
         android:text="空气指数"/>
+    -->
 
     <TextView
         android:id="@+id/comfort_text"

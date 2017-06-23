@@ -61,25 +61,6 @@
             app:headerLayout="@layout/nav_header">
         </android.support.design.widget.NavigationView>
 
-        <!--<LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="start">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:background="@color/colorPrimary"/>
-
-            <fragment
-                android:id="@+id/choose_area_fragment"
-                android:name="com.coolweather.android.ChooseAreaFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-        </LinearLayout>-->
-
     </android.support.v4.widget.DrawerLayout>
 
 

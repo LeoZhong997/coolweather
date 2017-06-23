@@ -9,11 +9,6 @@
             android:title="城市管理"/>
 
         <item
-            android:id="@+id/nav_mood"
-            android:icon="@drawable/ic_action_mood"
-            android:title="心情脚印"/>
-
-        <item
             android:id="@+id/nav_theme"
             android:icon="@drawable/ic_action_theme"
             android:title="主题皮肤"/>
@@ -22,9 +17,9 @@
             <menu>
                 <group android:checkableBehavior="single">
                     <item
-                        android:id="@+id/nav_update"
-                        android:icon="@drawable/ic_action_update"
-                        android:title="检查更新"/>
+                        android:id="@+id/nav_share"
+                        android:icon="@drawable/ic_action_share"
+                        android:title="分享"/>
 
                     <item
                         android:id="@+id/nav_setting"

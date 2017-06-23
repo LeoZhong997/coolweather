@@ -109,21 +109,26 @@ public class Utility {
             String weatherId = weather.basic.weatherId;
             String countyName = weather.basic.cityName;
             String weatherState = weather.now.more.info;
+            String weatherConditionCode = weather.now.more.weatherConditionCode;
             String weatherDegree = weather.now.temperature + "℃";
             List<CountyLoaded> countyLoadedList = DataSupport.where("weatherId = ?", weatherId).find(CountyLoaded.class);
             if (countyLoadedList.size() > 0) {
+                //如果当前解析的城市在数据库中存在，则只是更新数据
                 LogUtil.d(TAG, "countyLoadedList size " + countyLoadedList.size());
                 CountyLoaded countyLoaded = new CountyLoaded();
                 countyLoaded.setWeatherString(response);
                 countyLoaded.setWeatherDegree(weatherDegree);
                 countyLoaded.setWeatherState(weatherState);
+                countyLoaded.setWeatherCondCode(weatherConditionCode);
                 countyLoaded.updateAll("weatherId = ?", weatherId);
             } else {
+                //如果当前解析的城市在数据库中不存在，则向数据库添加数据
                 CountyLoaded countyLoaded = new CountyLoaded();
                 countyLoaded.setCountyName(countyName);
                 countyLoaded.setWeatherId(weatherId);
                 countyLoaded.setWeatherDegree(weatherDegree);
                 countyLoaded.setWeatherState(weatherState);
+                countyLoaded.setWeatherCondCode(weatherConditionCode);
                 countyLoaded.setWeatherString(response);
                 countyLoaded.save();
             }

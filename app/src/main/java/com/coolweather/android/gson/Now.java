@@ -21,6 +21,9 @@ public class Now {
     public Wind wind;
 
     public class More {
+        @SerializedName("code")
+        public String weatherConditionCode;
+
         @SerializedName("txt")
         public String info;
     }

@@ -5,4 +5,15 @@
     <string name="county_name_str">深圳</string>
     <string name="county_weather_state_str">少云</string>
     <string name="county_degree_str">27 ℃</string>
+    <string name="weather_share_subject">Weather Share Subject</string>
+    <string name="weather_share_text">%1$s天气: \n\n%2$s   %3$s   %4$s \n\n更新时间: %5$s分</string>
+    <string name="weather_icon_id_text">com.coolweather.android:drawable/w%1$d</string>
+    <string name="debug_info">软件版本号：v%1$d.%2$d\n设备SDK版本: %3$d\n已知Bug：%4$s</string>
+    <string name="debug_bug_info">继续完善内容</string>
+    <string name="setting_title_text">应用设置</string>
+    <string name="start_notification_bar_text">启用通知栏</string>
+    <string name="notification_title">天气标题</string>
+    <string name="notification_content">天气内容</string>
+    <string name="notification_weather_now_text">%1$s %2$s %3$s</string>
+    <string name="notification_refresh_time_text">%1$s 刷新</string>
 </resources>

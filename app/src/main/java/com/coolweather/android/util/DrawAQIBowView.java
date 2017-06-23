@@ -3,11 +3,15 @@ package com.coolweather.android.util;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.coolweather.android.R;
 
@@ -17,9 +21,12 @@ import com.coolweather.android.R;
 
 public class DrawAQIBowView extends BaseView {
 
+    private static final String TAG = "DrawAQIBowView";
+
     private Paint paint;
-    private RectF extRect = new RectF(0, 0, 350, 350);
-    private RectF intRect = new RectF(extRect.centerX() - 120, extRect.centerY() - 120, extRect.centerX() + 120, extRect.centerY() + 120);
+    private int viewW, viewH;
+    private RectF extRect;
+    private RectF intRect;
     private int startAngle = 180;
     private int sweepAngle = 180;
     private float aqiQuality = 100;
@@ -42,6 +49,20 @@ public class DrawAQIBowView extends BaseView {
     private void init() {
         paint = new Paint();
         paint.setAntiAlias(true);   //抗锯齿
+        final View view = getRootView();
+        ViewTreeObserver vto = view.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                viewW = view.getWidth();
+                viewH = view.getHeight();
+                extRect = new RectF(0, 0, viewW, viewW);
+                int gap = viewW * 3 / 8;
+                intRect = new RectF(extRect.centerX() - gap, extRect.centerY() - gap, extRect.centerX() + gap, extRect.centerY() + gap);
+                LogUtil.d(TAG, "AQIBowView: " + view.toString() + "\n" + "viewW :" + viewW + "\n" + "viewH: " + viewH);
+            }
+        });
     }
 
     @Override

@@ -9,6 +9,9 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewTreeObserver;
 
 /**
  * Created by ZhiQiang on 2017/5/4.
@@ -19,8 +22,11 @@ public class DrawSunBowView extends BaseView {
     private static final String TAG = "DrawSunBowView";
 
     private boolean running = false;
+    private int viewW, viewH;
+    private int sunWidth;
+    private int sunStroke, lineStroke;
     private Paint paint;
-    private RectF extRect = new RectF(50, 50, 800, 800);
+    private RectF extRect;
     private int startAngle = 180;
     private int sweepAngle = 180;
     private int currentAngle = 0;
@@ -46,6 +52,22 @@ public class DrawSunBowView extends BaseView {
     private void init() {
         paint = new Paint();
         paint.setAntiAlias(true);   //抗锯齿
+        final View view = getRootView();
+        ViewTreeObserver vto = view.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                viewW = view.getWidth();
+                viewH = view.getHeight();
+                sunWidth = viewW / 34;
+                sunStroke = sunWidth / 4;
+                lineStroke = sunStroke / 2;
+                int gap = sunWidth + sunStroke;
+                extRect = new RectF(gap, gap, viewW - gap, viewW - gap);
+                LogUtil.d(TAG, "SunBowView: " + view.toString() + "\n" + "viewW :" + viewW + "\n" + "viewH: " + viewH);
+            }
+        });
     }
 
     @Override
@@ -64,12 +86,12 @@ public class DrawSunBowView extends BaseView {
 
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.WHITE);
-            paint.setStrokeWidth(8);
+            paint.setStrokeWidth(lineStroke);
             canvas.drawArc(extRect, startAngle, sweepAngle, false, paint);
 
             paint.setStyle(Paint.Style.STROKE);
-            paint.setColor(Color.WHITE);
-            paint.setStrokeWidth(4);
+            paint.setColor(Color.YELLOW);
+            paint.setStrokeWidth(sunStroke);
             canvas.drawArc(getSunRect(), 0, 360, true, paint);
         }
 
@@ -97,7 +119,6 @@ public class DrawSunBowView extends BaseView {
         float sunYO = extRect.centerY();
         float sunX = (float) (sunXO - (Math.cos(Math.toRadians(currentAngle)) * sunR));
         float sunY = (float) (sunYO - (Math.sin(Math.toRadians(currentAngle)) * sunR));
-        int sunWidth = 20;
 
         sunRect = new RectF(sunX - sunWidth, sunY - sunWidth, sunX + sunWidth, sunY + sunWidth);
         return sunRect;
