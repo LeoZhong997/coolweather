@@ -8,11 +8,6 @@
             android:icon="@drawable/ic_action_city"
             android:title="城市管理"/>
 
-        <item
-            android:id="@+id/nav_theme"
-            android:icon="@drawable/ic_action_theme"
-            android:title="主题皮肤"/>
-
         <item android:title="其他选项">
             <menu>
                 <group android:checkableBehavior="single">

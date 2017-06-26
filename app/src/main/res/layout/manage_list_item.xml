@@ -32,14 +32,14 @@
             android:layout_marginBottom="5dp"
             android:textSize="18sp"
             android:textColor="@color/colorBlack"
-            android:text="@string/county_name_str"/>
+            android:text="@string/county_name_text"/>
 
         <TextView
             android:id="@+id/county_weather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="@string/county_weather_state_str"/>
+            android:text="@string/county_weather_state_text"/>
 
     </LinearLayout>
 
@@ -50,6 +50,6 @@
         android:layout_gravity="center_vertical"
         android:padding="10dp"
         android:textSize="26sp"
-        android:text="@string/county_degree_str"/>
+        android:text="@string/county_degree_text"/>
 
 </LinearLayout>

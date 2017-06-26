@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:background="@color/colorPopupBackground">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@color/colorWhite">
+
+        <TextView
+            android:id="@+id/popup_take_picture_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/popupTextViewHeight"
+            android:gravity="center"
+            android:textColor="@color/colorPopupText"
+            android:text="@string/take_picture_text"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorPopupLine"/>
+
+        <TextView
+            android:id="@+id/popup_select_from_gallery_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/popupTextViewHeight"
+            android:gravity="center"
+            android:textColor="@color/colorPopupText"
+            android:text="@string/select_from_gallery"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/popup_cancel_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/popupTextViewHeight"
+        android:gravity="center"
+        android:background="@color/colorWhite"
+        android:textColor="@color/colorPopupText"
+        android:text="@string/cancel_text"/>
+
+</LinearLayout>

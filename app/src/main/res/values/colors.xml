@@ -7,7 +7,11 @@
     <color name="colorGray">#8000</color>
     <color name="colorBlack">#000</color>
     <color name="colorLightBlue">#FF46BFEA</color>
-    <color name="colorNotificationBackground">#88dbd9d9</color>
+    <color name="colorNotificationBackground">#88edecec</color>
+
+    <color name="colorPopupBackground">#88000000</color>
+    <color name="colorPopupText">#666666</color>
+    <color name="colorPopupLine">#dfdfdf</color>
 
     <color name="currentTitleBackgroundColor">#3F51B5</color>
     <color name="currentTextColor">#fff</color>

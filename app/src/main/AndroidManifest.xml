@@ -3,6 +3,7 @@
           package="com.coolweather.android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".util.MyApplication"
@@ -12,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -22,15 +24,18 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity
             android:name=".WeatherActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait">
+        </activity>
 
         <service
             android:name=".service.AutoUpdateService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true">
+        </service>
 
         <receiver android:name=".WeatherWidget">
             <intent-filter>
@@ -57,11 +62,22 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
         </activity>
+
         <activity
             android:name=".AddAreaActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
         </activity>
+
+        <provider
+            android:authorities="com.coolweather.android.fileprovider"
+            android:name="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
     </application>
 
 </manifest>

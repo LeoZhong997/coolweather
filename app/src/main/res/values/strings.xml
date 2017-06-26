@@ -2,18 +2,42 @@
     <string name="app_name">CoolWeather</string>
     <string name="appwidget_text">WeatherWidget</string>
     <string name="add_widget">Add widget</string>
-    <string name="county_name_str">深圳</string>
-    <string name="county_weather_state_str">少云</string>
-    <string name="county_degree_str">27 ℃</string>
+    <string name="county_name_text">深圳</string>
+    <string name="county_weather_state_text">少云</string>
+    <string name="county_degree_text">%s ℃</string>
+    <string name="county_wind_speed_degree_text">%s 级</string>
+    <string name="county_wind_speed_text">%s km/h</string>
+    <string name="sun_set_text">日落 %s</string>、
+    <string name="sun_rise_text">日出 %s</string>
+    <string name="comfort_text">舒适指数：%1$s\n%2$s</string>
+    <string name="car_wash_text">洗车指数：%1$s\n%2$s</string>
+    <string name="sport_text">运动指数：%1$s\n%2$s</string>
+    <string name="dress_text">穿衣指数：%1$s\n%2$s</string>
+    <string name="travel_text">旅行指数：%1$s\n%2$s</string>
+    <string name="flu_text">流感指数：%1$s\n%2$s</string>
+    <string name="sun_screen_text">防晒指数：%1$s\n%2$s</string>
+
+    <string name="weather_request_url_text">http://guolin.tech/api/weather?cityid=%1$s&amp;key=3763dbce7be5488ebb14cde35213b557</string>
     <string name="weather_share_subject">Weather Share Subject</string>
+
     <string name="weather_share_text">%1$s天气: \n\n%2$s   %3$s   %4$s \n\n更新时间: %5$s分</string>
     <string name="weather_icon_id_text">com.coolweather.android:drawable/w%1$d</string>
+    <string name="debug_info_title">版本信息：</string>
+    <string name="confirm_text">确定</string>
     <string name="debug_info">软件版本号：v%1$d.%2$d\n设备SDK版本: %3$d\n已知Bug：%4$s</string>
     <string name="debug_bug_info">继续完善内容</string>
     <string name="setting_title_text">应用设置</string>
+
     <string name="start_notification_bar_text">启用通知栏</string>
     <string name="notification_title">天气标题</string>
     <string name="notification_content">天气内容</string>
     <string name="notification_weather_now_text">%1$s %2$s %3$s</string>
     <string name="notification_refresh_time_text">%1$s 刷新</string>
+
+    <string name="take_picture_text">拍照</string>
+    <string name="select_from_gallery">照片图库</string>
+    <string name="cancel_text">取消</string>
+
+    <string name="fail_to_load_picture_text">加载图片失败</string>
+    <string name="fail_to_get_weather_info_text">获取天气信息失败</string>
 </resources>

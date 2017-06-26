@@ -30,9 +30,9 @@ public class MainActivity extends BaseActivity implements ChooseAreaFragment.Bac
         setContentView(R.layout.activity_main);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        LogUtil.d(TAG, "onCreate: " + preferences.getString("weather", null));
+        LogUtil.d(TAG, "onCreate: " + preferences.getString(WeatherActivity.WEATHER_INFO_BODY, null));
         //在程序一启动时就先从 SharedPreferences 文件读取缓存数据，如果不为 null 则说明之前已经请求过天气数据了，就可以跳过再次选择城市跳转到 WeatherActivity
-        if (preferences.getString("weather", null) != null) {
+        if (preferences.getString(WeatherActivity.WEATHER_INFO_BODY, null) != null) {
             Intent intent = new Intent(this, WeatherActivity.class);
             intent.putExtra("activity_name", "MainActivity");
             startActivity(intent);

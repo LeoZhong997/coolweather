@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:textSize="20sp"
-            tools:text="@string/county_name_str"/>
+            tools:text="@string/county_name_text"/>
 
         <TextView
             android:id="@+id/notification_now_text_view"

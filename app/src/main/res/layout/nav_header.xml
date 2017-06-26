@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="205dp">
+    android:layout_height="210dp">
 
-    <View
+    <!--<View
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/conditionBarSize"
         android:layout_gravity="top"
-        android:background="@color/colorPrimary"/>
+        android:background="@color/colorPrimary"/>-->
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/view"
         android:paddingBottom="10dp">
 
         <ImageView
@@ -28,7 +28,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:src="@drawable/doge"/>
 
     </FrameLayout>

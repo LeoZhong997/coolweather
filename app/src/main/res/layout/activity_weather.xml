@@ -57,8 +57,7 @@
             android:layout_gravity="start"
             app:menu="@menu/nav_menu"
             app:itemIconTint="@color/colorLightBlue"
-            app:itemTextColor="@color/colorBlack"
-            app:headerLayout="@layout/nav_header">
+            app:itemTextColor="@color/colorBlack">
         </android.support.design.widget.NavigationView>
 
     </android.support.v4.widget.DrawerLayout>
